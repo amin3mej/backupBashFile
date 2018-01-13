@@ -1,0 +1,20 @@
+-- INSERT --                                                              3,17          All
+#!/bin/bash
+DB_USER='homestead'
+DB_PASS='secret'
+DATE_WITH_TIME=`date "+%Y%m%d-%H%M%S"`
+DIRECTORY="./backupFiles/$DATE_WITH_TIME/"
+TARGET_DIRECTORY="./code/dongipal/runtime/uploads"
+MYSQL_RESULT=`mysqldump -u$DB_USER -p$DB_PASS dongipal 2> /dev/null`
+filename="./$DIRECTORY/backup.tar.gz"
+mkdir -p $DIRECTORY
+echo "$MYSQL_RESULT" > "$DIRECTORY/database.sql"
+cp -r $TARGET_DIRECTORY $DIRECTORY
+tar -czvf "$filename" -C $DIRECTORY . &> /dev/null
+file_size_kb=`du -k "$filename" | cut -f1`
+echo "backup created successfully | size :: $file_size_kb KB"
+
+currentFiles=`ls -l "./backupFiles/" | grep -v ^l | wc -l`
+if [ $((currentFiles + 0)) -gt 10 ]; then
+  rm -rf "./backupFiles/$(ls -t "./backupFiles/" | tail -1)"
+fi
