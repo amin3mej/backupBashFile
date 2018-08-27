@@ -2,10 +2,11 @@
 #!/bin/bash
 DB_USER='homestead'
 DB_PASS='secret'
+DB_NAME='flask'
 DATE_WITH_TIME=`date "+%Y%m%d-%H%M%S"`
 DIRECTORY="./backupFiles/$DATE_WITH_TIME/"
 TARGET_DIRECTORY="./code/dongipal/runtime/uploads"
-MYSQL_RESULT=`mysqldump -u$DB_USER -p$DB_PASS dongipal 2> /dev/null`
+MYSQL_RESULT=`mysqldump -u$DB_USER -p$DB_PASS $DB_NAME 2> /dev/null`
 filename="./$DIRECTORY/backup.tar.gz"
 mkdir -p $DIRECTORY
 echo "$MYSQL_RESULT" > "$DIRECTORY/database.sql"
